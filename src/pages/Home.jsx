@@ -16,7 +16,11 @@ function Home() {
                     </h1>
                     <p className='fw-bold fs-4 pr' style={{fontFamily:"Source Sans 3,san-serif"}}>Welcome to Project-Fair: Your Ultimate Project Management Hub! <br /></p>
                     <p className=' pr mt-2 fw-bold  fs-6' style={{fontFamily:"Source Sans 3,san-serif"}}>Don't miss out on the opportunity to streamline your project management and connect with others who share your passions. Join Project-Fair today and become a part of this exciting community! Thank you for choosing Project-Fail, where every project is an opportunity to learn, grow, and succeed!</p>
-                   
+                   {/* {
+                    isLoggedIn?<Link to={"/dashboard"} className='btn btn-warning'> Manage ayour aprojects <i className='fa-solid fa-right-long fa-beat ms-2'></i>
+                    </Link> :<Link to={"/login"} className='btn btn-warning'> Start to explore<i className='fa-solid fa-right-long fa-beat ms-2'></i>
+                    </Link>
+                   } */}
                     
                     <button className='btn fw-bold text-white mb-1' style={{backgroundColor:'#6D3297'}}>Getting Started <i className='fa-solid fa-right-long fa-beat ms-2'></i></button>
                     
