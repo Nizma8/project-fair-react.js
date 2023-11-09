@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginImage from "../Assets/login.png";
+import { registerApi } from "../services/allApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Auth({ register }) {
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  console.log(userData);
+  const navigate = useNavigate();
   const registerForm = register ? true : false;
-
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    const { username, email, password } = userData;
+    if (!username || !email || !password) {
+      toast.error("please fill the form");
+    } else {
+      const response = await registerApi(userData);
+      if (response.status === 200) {
+        toast.success(`${response.data.username} is successfully registered!!`);
+        setUserData({ username: "", email: "", password: "" });
+        navigate("/login");
+      } else {
+        toast.warning(response.response.data);
+      }
+    }
+  };
   return (
     <div
       style={{ width: "100%", height: "100vh" }}
@@ -36,40 +61,83 @@ function Auth({ register }) {
                 <h5 className="fw-normal mt-5 pb-4 text-light">
                   {" "}
                   {registerForm
-                    ? "Sign Up To Your Account"
+                    ? "Sign up to your account"
                     : "Sign In to Your Account"}
                 </h5>
 
                 <Form className="text-light w-75">
                   {registerForm && (
                     <Form.Group className="mb-3" controlId="formBasicUsername1">
-                      <Form.Control type="text" placeholder="Enter Your Name" />
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter Your Name"
+                        onChange={(e) => {
+                          setUserData({
+                            ...userData,
+                            username: e.target.value,
+                          });
+                        }}
+                        value={userData.username}
+                      />
                     </Form.Group>
                   )}
                   <Form.Group className="mb-3" controlId="formBasicEmail1">
                     <Form.Control
                       type="email"
                       placeholder="Enter Your Email Id"
+                      onChange={(e) => {
+                        setUserData({ ...userData, email: e.target.value });
+                      }}
+                      value={userData.email}
                     />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicPassword1">
                     <Form.Control
                       type="password"
                       placeholder="Enter Your Password"
+                      onChange={(e) => {
+                        setUserData({ ...userData, password: e.target.value });
+                      }}
+                      value={userData.password}
                     />
                   </Form.Group>
 
-                  {
-                   registerForm? <div><Button variant="light" type="submit" size="lg">Register</Button>
-                   <p className="mt-3">Already have an account? <Link to="/login" className="text-secondary lh-base btn-link ms-2">Login Here</Link>
-
-                   </p>
-                   </div> :<div><Button variant="light" type="submit" size="lg">Login</Button>
-                   <p  className="mt-3">New User? <Link to="/register" className=" fw-bolder text-secondary lh-base btn-link ms-2">Register</Link>
-
-                   </p>
-                   </div>
-                  }
+                  {registerForm ? (
+                    <div>
+                      <Button
+                        variant="info"
+                        type="submit"
+                        size="lg"
+                        onClick={handleRegister}
+                      >
+                        Register
+                      </Button>
+                      <p className="mt-3">
+                        Already have an account?{" "}
+                        <Link
+                          to="/login"
+                          className=" lh-base btn-link ms-2 text-info"
+                        >
+                          Login Here
+                        </Link>
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <Button variant="info" type="submit" size="lg">
+                        Login
+                      </Button>
+                      <p className="mt-3">
+                        New User?{" "}
+                        <Link
+                          to="/register"
+                          className=" fw-bolder text-info lh-base btn-link ms-2"
+                        >
+                          Register
+                        </Link>
+                      </p>
+                    </div>
+                  )}
                 </Form>
               </div>
             </Col>
@@ -83,6 +151,18 @@ function Auth({ register }) {
           </Row>
         </Card>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </div>
   );
 }
