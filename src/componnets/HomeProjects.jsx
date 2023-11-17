@@ -4,16 +4,16 @@ import { Col, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 
-function HomeProjects() {
+function HomeProjects({allProjects}) {
   return (
    <>
    <h1 className='text-center my-5'>Explore Our Projects</h1>
        <marquee scrollAmount={25}>
           <Row>
-              <Col sm={12} md= {6} lg= {4}>
-                  <CardProjects/>
+             {allProjects?.length>0?allProjects.map(item=><Col sm={12} md= {6} lg= {4}>
+                  <CardProjects item={item} />
               
-              </Col>
+              </Col>):"" }
              </Row>
              
        </marquee>

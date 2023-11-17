@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import loginImage from "../Assets/login.png";
-import { registerApi } from "../services/allApi";
+import { loginApi, registerApi } from "../services/allApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -31,6 +31,27 @@ function Auth({ register }) {
       }
     }
   };
+
+  const handleLogin = async (event)=>{
+    event.preventDefault();
+    const {  email, password } = userData;
+    if ( !email || !password) {
+      toast.error("please fill the form");
+    } else {
+      const response = await loginApi({email,password});
+      if (response.status === 200) {
+        // save res 
+        localStorage.setItem("existingUser",JSON.stringify(response.data.existingUser))
+        localStorage.setItem("role",response.data.role)
+        // save token
+        sessionStorage.setItem("token",response.data.token)
+        setUserData({  email: "", password: "" });
+        navigate("/");
+      } else {
+        toast.warning(response.response.data);
+      }
+    }
+  }
   return (
     <div
       style={{ width: "100%", height: "100vh" }}
@@ -124,7 +145,7 @@ function Auth({ register }) {
                     </div>
                   ) : (
                     <div>
-                      <Button variant="info" type="submit" size="lg">
+                      <Button variant="info" type="submit" size="lg" onClick={handleLogin}>
                         Login
                       </Button>
                       <p className="mt-3">
