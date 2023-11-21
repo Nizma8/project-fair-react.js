@@ -13,7 +13,7 @@ function Home() {
   const getHomeProjects = async ()=>{
     const response = await homeProjects()
     if(response.status===200){
-      setAllProjects(response.data)
+      setAllProjects(response?.data)
     }else{
       alert(response.response.data)
     }

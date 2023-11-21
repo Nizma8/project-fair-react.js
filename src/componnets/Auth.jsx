@@ -15,6 +15,7 @@ function Auth({ register }) {
   console.log(userData);
   const navigate = useNavigate();
   const registerForm = register ? true : false;
+  // register
   const handleRegister = async (event) => {
     event.preventDefault();
     const { username, email, password } = userData;
@@ -31,7 +32,7 @@ function Auth({ register }) {
       }
     }
   };
-
+//login
   const handleLogin = async (event)=>{
     event.preventDefault();
     const {  email, password } = userData;

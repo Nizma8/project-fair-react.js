@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddProject from "../componnets/AddProject"
-import { userProjectApi } from '../services/allApi'
-function MyProjects() {
-    const [pro,setPro]=useState([])
-    const [token,setToken]= useState("")
+import { removeProject, userProjectApi } from '../services/allApi'
+import { addProjectResponseContext, ediptProjectResponseContext } from '../context/ContextShare'
+import EditProject from './EditProject'
 
-    useEffect(()=>{
-        if( sessionStorage.getItem("token")){
-            setToken(sessionStorage.getItem("token"))
-            getUserProjects()
-          }
-    },[pro,token])
-    console.log(token);
+function MyProjects() {
+    const {projectResponse}= useContext(addProjectResponseContext)
+    const {editProjectResponse} = useContext(ediptProjectResponseContext)
+    const [pro,setPro]=useState([])
+    const [token, setToken] = useState(() => sessionStorage.getItem("token") || "");
+    useEffect(() => {
+        if (token) {
+          getUserProjects();
+        }
+      }, [projectResponse,editProjectResponse]);
+
     const getUserProjects = async ()=>{
       
         const reqHeader ={
@@ -20,6 +23,17 @@ function MyProjects() {
         }
         const response =await  userProjectApi (reqHeader)
         setPro(response.data)
+    }
+    const projectRemove = async(id)=>{
+        const reqHeader ={
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
+        }
+        await removeProject(id,reqHeader)
+         getUserProjects()
+
+     
+
     }
     console.log(pro);
   return (
@@ -36,12 +50,12 @@ function MyProjects() {
        {
         pro?.length>0?pro?.map(item=>{
             return(
-                <div className="border d-flex align-items-center rounded p-2" key={item.id}>
+                <div className="border d-flex align-items-center rounded p-2 mb-2" key={item.id}>
                 <h4>{item.title}</h4>
                 <div className='ms-auto icons'>
-                    <button className='btn'> <i className='fa-solid fa-edit ' ></i></button>
+                    <EditProject displayData ={item}/>
                     <a className='btn' href={`${item.github}`} target='_blank'> <i className='fa-brands fa-github '></i></a>
-                    <button className='btn'> <i className='fa-solid fa-trash '></i></button>
+                    <button className='btn' onClick={()=>projectRemove(item._id)}> <i className='fa-solid fa-trash '></i></button>
                 </div>
 
                

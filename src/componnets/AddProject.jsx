@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addProject } from '../services/allApi';
+import { addProjectResponseContext } from '../context/ContextShare';
 
 function AddProject() {
+  const {setProjectResponse}= useContext(addProjectResponseContext)
     const [show, setShow] = useState(false);
     const [token,setToken]= useState("")
     const [projectDetails,setProjectDetails]=useState({
@@ -65,7 +67,6 @@ else{
   }
 
   const result = await addProject(reqBody,reqHeader)
-  console.log(result);
   if(result.status === 200){
     toast.success(`project ${result?.data?.title} added succesfully`)
     setProjectDetails({
@@ -77,6 +78,7 @@ else{
       image:"",
       // userID:""
     })
+    setProjectResponse(result.data)
     handleClose()
   }else{
     toast.warning(`${result?.response?.data}`)
