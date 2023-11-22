@@ -2,8 +2,15 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Header({ insideDashboard }) {
+const navigate = useNavigate()
+  const handleLogout= () =>{
+    sessionStorage.removeItem("token")
+    localStorage.removeItem("existingUser")
+    localStorage.removeItem("role")
+navigate('/')
+  }
   return (
     <>
       <Navbar
@@ -30,7 +37,7 @@ function Header({ insideDashboard }) {
           </Navbar.Brand>
 
           {insideDashboard && (
-            <Button className="ms-auto btn-info btn-link text-decoration-none text-white fs-5">
+            <Button className="ms-auto btn-info btn-link text-decoration-none text-white fs-5" onClick={handleLogout}>
               {" "}
               Logout
               <i className="fa-solid fa-right-from-bracket ms-2 fa-beat"></i>

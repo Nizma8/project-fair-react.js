@@ -42,3 +42,9 @@ export const removeProject = async (projectId,reqHeader)=>{
     return await commonApi("DELETE",`${BASEURL}/projects/delete/${projectId}`,{},reqHeader)
 
 }
+
+// to update profile
+
+export const updateProfile = async(user,reqHeader)=>{
+    return await commonApi("PUT",`${BASEURL}/user/update`,user,reqHeader)
+}

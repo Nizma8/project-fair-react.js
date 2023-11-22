@@ -30,7 +30,7 @@ useEffect(()=>{
   }else{
     alert("please login")
   }
-},[])
+},[searchKey])
   return (
 <>
 {/* navbar */}
